@@ -1,7 +1,6 @@
 streamlit
-pandas
-numpy
-plotly
-openpyxl
-requests
+selenium
 beautifulsoup4
+pandas
+webdriver-manager
+requests
