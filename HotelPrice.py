@@ -6,6 +6,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.core.os_manager import ChromeType # 新增這行：用來指定 Chromium
+import shutil # 新增這行：用來尋找系統路徑
 # 記得如果要在 Streamlit Cloud 跑，上面這些 import 和套件都要有
 
 # ==========================================
@@ -16,10 +18,16 @@ def get_driver():
     options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
+    options.add_argument('--disable-gpu') # 雲端環境建議加上這行防呆
     options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
     
-    # 推薦寫法：使用 webdriver-manager
-    return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    # 告訴 Selenium 真正的瀏覽器安裝在哪裡 (如果找不到就預設為 /usr/bin/chromium)
+    options.binary_location = shutil.which("chromium") or "/usr/bin/chromium"
+    
+    # 下載並安裝 Chromium 版本的驅動程式
+    driver_path = ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
+    
+    return webdriver.Chrome(service=Service(driver_path), options=options)
 
 def fetch_booking(target):
     # 這裡放你原本寫好的 Booking 爬蟲邏輯
