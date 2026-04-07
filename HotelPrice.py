@@ -3,6 +3,8 @@ import pandas as pd
 import time
 import shutil
 import re
+import os
+import shutil
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -83,6 +85,11 @@ with st.container():
 
 st.divider()
 
+with st.expander("🛠️ 系統環境偵測 (除錯用)"):
+    st.write("Chromium 路徑:", shutil.which("chromium") or "未找到")
+    st.write("Chromedriver 路徑:", shutil.which("chromedriver") or "未找到")
+    st.write("/usr/bin/chromium 是否存在?", os.path.exists("/usr/bin/chromium"))
+    st.write("/usr/bin/chromedriver 是否存在?", os.path.exists("/usr/bin/chromedriver"))
 # ==========================================
 # 區塊 4：執行與結果展示
 # ==========================================
